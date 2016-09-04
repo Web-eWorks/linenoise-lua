@@ -35,7 +35,7 @@ Linenoise supports two callbacks: **completion**, and **hint**.  These are funct
 that linenoise calls to get context-appropriate information to display to the user.
 
 ### Completions:
-The completion callback funtction is called every time the user presses `Tab` when not already cycling through a completion list.  This function defines the various options the user has to complete what is being typed.
+The completion callback function is called every time the user presses `Tab` when not already cycling through a completion list.  This function defines the various options the user has to complete what is being typed.
 
 The completion callback takes two arguments:
 * `line` - The current line the user is typing.
