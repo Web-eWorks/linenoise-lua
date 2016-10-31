@@ -1,6 +1,7 @@
-CC = clang
-CFLAGS = -O2 $(CWARN)
+CC = gcc
+CFLAGS += -O2 -fPIC $(CWARN)
 CWARN = -Wall -Werror
+Q=@
 
 LNDIR = linenoise
 SO = linenoise.so
@@ -8,22 +9,26 @@ SO = linenoise.so
 LUAVER = 5.3
 LUALIBDIR = /usr/local/lib/lua/$(LUAVER)
 
-.PHONY: all, install, clean
+.PHONY: all, install, clean, debug
 
 all: $(SO)
 
-$(LNDIR)/linenoise.c:
-	git submodule update $(LNDIR)
+debug: CFLAGS += -g -O1
+debug: Q =
+debug: $(SO)
 
-$(SO): CFLAGS += -fPIC
+$(LNDIR)/linenoise.c:
+	@ git submodule update $(LNDIR)
+
 $(SO): linenoise-lua.c $(LNDIR)/linenoise.c
-	$(CC) $(CFLAGS) -shared -o $@ $^ -I$(LNDIR)
+	@ echo Compiling {$^} to [$@]
+	$(Q) $(CC) $(CFLAGS) -shared -o $@ $^ -I$(LNDIR)
 
 install:
-	cp -u $(SO) $(LUALIBDIR)/$(SO)
+	@ cp -u $(SO) $(LUALIBDIR)/$(SO)
 
 uninstall:
-	rm $(LUALIBDIR)/$(SO)
+	@ rm $(LUALIBDIR)/$(SO)
 
 clean:
-	rm -f *.o *.so
+	@ rm -f *.o *.so
